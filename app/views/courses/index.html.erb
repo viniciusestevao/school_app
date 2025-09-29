@@ -1,0 +1,45 @@
+<% content_for :title, "Cursos" %>
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h1 class="h3 m-0">Cursos</h1>
+  <%= link_to "Novo curso", new_course_path, class: "btn btn-primary" %>
+</div>
+
+<% if @courses.any? %>
+  <div class="card">
+    <div class="table-responsive">
+      <table class="table table-hover align-middle m-0">
+        <thead class="table-light">
+          <tr>
+            <th>Título</th>
+            <th>Descrição</th>
+            <th class="text-end">Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @courses.each do |course| %>
+            <tr id="<%= dom_id(course) %>">
+              <td><%= course.title %></td>
+              <td class="text-muted">
+                <%= truncate(course.description.to_s, length: 120) %>
+              </td>
+              <td class="text-end">
+                <%= link_to "Ver", course, class: "btn btn-sm btn-outline-secondary me-1" %>
+                <%= link_to "Editar", edit_course_path(course), class: "btn btn-sm btn-outline-primary me-1" %>
+                <%= link_to "Excluir", course,
+                      data: { turbo_method: :delete,
+                              turbo_confirm: "Tem certeza que deseja excluir o curso “#{course.title}”?" },
+                      class: "btn btn-sm btn-outline-danger" %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+<% else %>
+  <div class="text-center p-5 border rounded-3 bg-light">
+    <p class="mb-3">Nenhum curso cadastrado ainda.</p>
+    <%= link_to "Cadastrar primeiro curso", new_course_path, class: "btn btn-primary" %>
+  </div>
+<% end %>

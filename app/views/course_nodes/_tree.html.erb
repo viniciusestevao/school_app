@@ -1,0 +1,54 @@
+<% tree.each do |node, children| %>
+  <% dom  = "node-#{node.id}" %>
+  <% chip = node_kind_chip(node) %>
+  <% expanded = children.present? %>
+
+  <li class="mb-2" data-node-id="<%= node.id %>">
+    <div class="d-flex align-items-center gap-2">
+
+      <%# Botão de collapse SEM borda %>
+      <% if children.present? %>
+        <button type="button"
+                class="btn-icon <%= 'collapsed' unless expanded %>"
+                data-bs-toggle="collapse"
+                data-bs-target="#children-<%= dom %>"
+                aria-expanded="<%= expanded %>"
+                aria-controls="children-<%= dom %>"
+                title="Expandir/colapsar">
+          <i class="bi bi-caret-down"></i>
+        </button>
+      <% else %>
+        <span class="btn-icon invisible"><i class="bi bi-caret-right"></i></span>
+      <% end %>
+
+      <%# CHIP = drag handle + indicação do tipo (cor/ícone/tooltip dinâmicos) %>
+      <button type="button"
+              class="btn btn-sm <%= chip[:btn] %> drag-handle hint"
+              data-hint="<%= "#{chip[:label]}" %>">
+        <i class="bi <%= chip[:icon] %>"></i>
+      </button>        
+
+      <%# Título + descrição %>
+      <strong><%= node.title %></strong>
+      <% if node.description.present? %>
+        <span class="text-muted small"><%= node.description %></span>
+      <% end %>
+
+      <div class="ms-auto d-flex gap-1">
+        <%= link_to "Nova Seção", new_course_node_path(course, parent_id: node.id), class: "btn btn-sm btn-outline-primary" %>
+        <%= link_to "Editar", edit_course_node_path(course, node), class: "btn btn-sm btn-outline-primary" %>
+        <%= link_to "Excluir", course_node_path(course, node), data: { turbo_method: :delete, turbo_confirm: "Excluir “#{node.title}”?" }, class: "btn btn-sm btn-outline-danger" %>
+      </div>
+    </div>
+
+    <%# Lista de filhos (alvo do drag-and-drop) %>
+    <ul id="children-<%= dom %>"
+        class="list-unstyled ms-4 mt-2 collapse <%= 'show' if children.present? %>"
+        data-tree-target="list"
+        data-parent-id="<%= node.id %>">
+      <% if children.present? %>
+        <%= render partial: "tree", locals: { tree: children, course: course } %>
+      <% end %>
+    </ul>
+  </li>
+<% end %>

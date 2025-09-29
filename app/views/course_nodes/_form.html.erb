@@ -1,0 +1,44 @@
+<%= form_with model: @node,
+              url: (@node.persisted? ? course_node_path(@course, @node) : course_nodes_path(@course)),
+              class: "needs-validation" do |f| %>
+
+  <% if @node.errors.any? %>
+    <div class="alert alert-danger">
+      <strong><%= pluralize(@node.errors.count, "erro") %> impediram salvar:</strong>
+      <ul class="mb-0">
+        <% @node.errors.full_messages.each do |msg| %><li><%= msg %></li><% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="row">
+    <div class="col-md-6 mb-3">
+      <%= f.label :title, "Título", class: "form-label" %>
+      <%= f.text_field :title, class: "form-control", required: true %>
+    </div>
+
+    <div class="col-md-3 mb-3">
+      <%= f.label :kind, "Tipo", class: "form-label" %>
+      <%= f.select :kind, CourseNode.kinds.keys.map { |k| [k.humanize, k] },
+            {}, class: "form-select" %>
+    </div>
+
+    <div class="col-md-3 mb-3">
+      <%= f.label :parent_id, "Pertence a", class: "form-label" %>
+      <%= f.select :parent_id,
+          options_for_select(parent_options(@course, @node), @node.parent_id),
+          { include_blank: "Nó raiz" },
+          class: "form-select" %>
+    </div>
+  </div>
+
+  <div class="mb-3">
+    <%= f.label :description, "Descrição", class: "form-label" %>
+    <%= f.text_area :description, rows: 4, class: "form-control" %>
+  </div>
+
+  <div class="d-flex justify-content-end gap-2">
+    <%= link_to "Cancelar", course_nodes_path(@course), class: "btn btn-outline-secondary" %>
+    <%= f.submit @node.persisted? ? "Salvar alterações" : "Criar nó", class: "btn btn-primary" %>
+  </div>
+<% end %>

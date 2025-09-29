@@ -1,0 +1,14 @@
+<% content_for :title, "Editar curso" %>
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h1 class="h3 m-0">Editar curso</h1>
+  <div>
+    <%= link_to "Ver", @course, class: "btn btn-outline-secondary me-2" %>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-body">
+    <%= render "form", course: @course %>
+  </div>
+</div>

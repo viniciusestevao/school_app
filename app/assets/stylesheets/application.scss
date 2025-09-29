@@ -1,0 +1,77 @@
+@use "bootstrap/scss/bootstrap";
+
+#toast-stack { .toast { min-width: 320px; } }
+
+
+/* --- Tooltip leve, sem JS --- */
+.hint {
+  position: relative; /* âncora do tooltip */
+}
+
+.hint[data-hint]::after,
+.hint[data-hint]::before {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .15s ease, transform .15s ease;
+}
+
+.hint[data-hint]::after {
+  content: attr(data-hint);
+  bottom: 125%;
+  background: rgba(0,0,0,.85);
+  color: #fff;
+  font-size: .825rem;
+  padding: .35rem .5rem;
+  border-radius: .35rem;
+  white-space: nowrap;
+  z-index: 1000;
+}
+
+.hint[data-hint]::before {
+  content: "";
+  bottom: 118%;
+  border: 6px solid transparent;
+  border-top-color: rgba(0,0,0,.85);
+  z-index: 999;
+}
+
+/* mostrar no hover/focus */
+.hint:hover[data-hint]::after,
+.hint:focus-visible[data-hint]::after,
+.hint:hover[data-hint]::before,
+.hint:focus-visible[data-hint]::before {
+  opacity: 1;
+  transform: translateX(-50%) translateY(-2px);
+}
+
+/* acessibilidade: respeita redução de movimento */
+@media (prefers-reduced-motion: reduce) {
+  .hint[data-hint]::after,
+  .hint[data-hint]::before {
+    transition: none;
+  }
+}
+
+
+.btn-icon {
+  --size: 28px;
+  width: var(--size);
+  height: var(--size);
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+  color: #6c757d;
+  border-radius: .375rem;
+  cursor: pointer;
+}
+.btn-icon:hover { background: rgba(0,0,0,.04); color: #212529; }
+.btn-icon:focus { outline: none; box-shadow: 0 0 0 .2rem rgba(13,110,253,.15); }
+.btn-icon .bi { font-size: 1rem; transition: transform .15s ease; }
+.btn-icon.collapsed .bi-caret-down { transform: rotate(-90deg); }

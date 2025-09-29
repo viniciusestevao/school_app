@@ -1,0 +1,23 @@
+<% content_for :title, "Estrutura do curso: #{@course.title}" %>
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h1 class="h3 m-0">Estrutura do curso</h1>
+  <%= link_to "Novo módulo", new_course_node_path(@course), class: "btn btn-primary" %>
+</div>
+
+<div class="card">
+  <div class="card-body"
+       data-controller="tree"
+       data-tree-course-id-value="<%= @course.id %>">
+    <% if @arranged.blank? %>
+      <p class="text-muted mb-0">Ainda não há nós.</p>
+    <% else %>
+      <ul class="list-unstyled"
+          data-tree-target="list"
+          data-parent-id="">
+        <%= render partial: "tree", locals: { tree: @arranged, course: @course } %>
+      </ul>
+    <% end %>
+  </div>
+</div>
+

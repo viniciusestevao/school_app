@@ -1,0 +1,9 @@
+<h1>Página Inicial</h1>
+
+<% if user_signed_in? %>
+  <p>Olá, <%= current_user.name.presence || current_user.email %>!</p>
+  <%= link_to 'Sair', destroy_user_session_path, data: { turbo_method: :delete } %>
+<% else %>
+  <%= link_to 'Entrar', new_user_session_path %> |
+  <%= link_to 'Cadastrar', new_user_registration_path %>
+<% end %>
