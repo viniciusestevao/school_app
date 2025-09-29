@@ -37,11 +37,15 @@ jobs:
           ruby-version: 3.3
           bundler-cache: true
 
-      # Instala dependências do sistema (Node/Yarn, pq Rails usa pra assets)
+      # Instala Node.js
       - name: Install Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '20'
+
+      # Ativa Corepack (necessário para Yarn no Rails 8+)
+      - name: Enable Corepack
+        run: corepack enable
 
       - name: Install packages
         run: |
