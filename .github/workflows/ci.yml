@@ -47,6 +47,15 @@ jobs:
       - name: Enable Corepack
         run: corepack enable
 
+      # Define a versão correta do Yarn (a mesma do package.json)
+      - name: Set Yarn version
+        run: corepack prepare yarn@4.10.1 --activate
+
+      # Instala dependências JS (usando lockfile)
+      - name: Install JS deps
+        run: yarn install --immutable
+
+      # Instala dependências do sistema
       - name: Install packages
         run: |
           sudo apt-get update

@@ -1,19 +1,19 @@
-# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+# test/fixtures/course_nodes.yml
 
 one:
-  course: one
+  course_id: <%= ActiveRecord::FixtureSet.identify(:one) %>
   title: MyString
   description: MyText
   kind: 1
   position: 1
-  ancestry: MyString
-  settings: 
+  ancestry:
+  settings: {}
 
 two:
-  course: two
+  course_id: <%= ActiveRecord::FixtureSet.identify(:two) %>
   title: MyString
   description: MyText
   kind: 1
   position: 1
-  ancestry: MyString
-  settings: 
+  ancestry:
+  settings: {}

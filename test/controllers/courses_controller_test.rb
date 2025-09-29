@@ -2,6 +2,7 @@ require "test_helper"
 
 class CoursesControllerTest < ActionDispatch::IntegrationTest
   setup do
+    sign_in users(:one)
     @course = courses(:one)
   end
 
@@ -20,7 +21,7 @@ class CoursesControllerTest < ActionDispatch::IntegrationTest
       post courses_url, params: { course: { description: @course.description, title: @course.title } }
     end
 
-    assert_redirected_to course_url(Course.last)
+    assert_redirected_to courses_url
   end
 
   test "should show course" do
@@ -35,7 +36,7 @@ class CoursesControllerTest < ActionDispatch::IntegrationTest
 
   test "should update course" do
     patch course_url(@course), params: { course: { description: @course.description, title: @course.title } }
-    assert_redirected_to course_url(@course)
+    assert_redirected_to courses_url
   end
 
   test "should destroy course" do

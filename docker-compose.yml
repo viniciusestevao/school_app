@@ -7,6 +7,11 @@ services:
       POSTGRES_DB: school_app_development
     volumes:
       - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d school_app_development"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
 
   redis:
     image: redis:7-alpine
@@ -14,13 +19,16 @@ services:
   app:
     build:
       context: .
-      target: dev          # <- usa o estágio dev 
+      target: dev         # usa o estágio dev do seu Dockerfile
       args:
         PRECOMPILE: "0"
     environment:
       RAILS_ENV: development
-      DATABASE_URL: postgres://postgres:postgres@db:5432/school_app_development
+      PGHOST: db
+      PGUSER: postgres
+      PGPASSWORD: postgres
       REDIS_URL: redis://redis:6379/1
+      # RAILS_MASTER_KEY: ${RAILS_MASTER_KEY}   # se precisar em prod/CI
     volumes:
       - .:/rails:cached
       - bundle:/usr/local/bundle
@@ -28,8 +36,10 @@ services:
     ports:
       - "3000:3000"
     depends_on:
-      - db
-      - redis
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_started
 
 volumes:
   pgdata:

@@ -21,7 +21,9 @@
   </div>
 
   <div class="d-flex justify-content-end gap-2">
-    <%= link_to "Estrutura", course_nodes_path(@course), class: "btn btn-primary" %>
+    <% if @course&.persisted? %>
+      <%= link_to "Estrutura", course_nodes_path(@course), class: "btn btn-primary" %>
+    <% end %>
   </div>
 
   <div class="d-flex justify-content-end gap-2">
