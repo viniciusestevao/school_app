@@ -1,12 +1,15 @@
-<%= form_with model: @node,
-              url: (@node.persisted? ? course_node_path(@course, @node) : course_nodes_path(@course)),
-              class: "needs-validation" do |f| %>
+<%= form_with model: node,
+              url: (node.persisted? ?
+                     course_node_path(course, node) :
+                     course_nodes_path(course)),
+              class: "needs-validation",
+              data: { turbo: true } do |f| %>
 
-  <% if @node.errors.any? %>
+  <% if node.errors.any? %>
     <div class="alert alert-danger">
-      <strong><%= pluralize(@node.errors.count, "erro") %> impediram salvar:</strong>
+      <strong><%= pluralize(node.errors.count, "erro") %> impediram salvar:</strong>
       <ul class="mb-0">
-        <% @node.errors.full_messages.each do |msg| %><li><%= msg %></li><% end %>
+        <% node.errors.full_messages.each do |msg| %><li><%= msg %></li><% end %>
       </ul>
     </div>
   <% end %>
@@ -20,15 +23,15 @@
     <div class="col-md-3 mb-3">
       <%= f.label :kind, "Tipo", class: "form-label" %>
       <%= f.select :kind, CourseNode.kinds.keys.map { |k| [k.humanize, k] },
-            {}, class: "form-select" %>
+                   {}, class: "form-select" %>
     </div>
 
     <div class="col-md-3 mb-3">
       <%= f.label :parent_id, "Pertence a", class: "form-label" %>
       <%= f.select :parent_id,
-          options_for_select(parent_options(@course, @node), @node.parent_id),
-          { include_blank: "Nó raiz" },
-          class: "form-select" %>
+                   options_for_select(parent_options(course, node), node.parent_id),
+                   { include_blank: "Curso" },
+                   class: "form-select" %>
     </div>
   </div>
 
@@ -38,7 +41,8 @@
   </div>
 
   <div class="d-flex justify-content-end gap-2">
-    <%= link_to "Cancelar", course_nodes_path(@course), class: "btn btn-outline-secondary" %>
-    <%= f.submit @node.persisted? ? "Salvar alterações" : "Criar nó", class: "btn btn-primary" %>
+    <button type="button" class="btn btn-outline-secondary" data-action="modal#close">Cancelar</button>
+    <%= f.submit node.persisted? ? "Salvar alterações" : "Criar nó",
+                 class: "btn btn-primary" %>
   </div>
 <% end %>

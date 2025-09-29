@@ -1,0 +1,16 @@
+<div id="structure_tree"
+     data-controller="tree"
+     data-tree-course-id-value="<%= course.id %>">
+
+  <div class="d-flex justify-content-end mb-2">
+    <%= link_to "Novo módulo",
+                new_course_node_path(course),
+                data: { turbo_frame: "modal" },
+                class: "btn btn-primary btn-sm" %>
+  </div>
+
+  <ul class="list-unstyled" data-tree-target="list" data-parent-id="">
+    <%= render partial: "course_nodes/tree",
+               locals:  { tree: arranged, course: course } %>
+  </ul>
+</div>

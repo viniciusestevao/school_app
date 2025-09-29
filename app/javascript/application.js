@@ -6,6 +6,9 @@ const Stimulus = Application.start()
 import TreeController from "./controllers/tree_controller"
 Stimulus.register("tree", TreeController)
 
+import ModalController from "./controllers/modal_controller"
+Stimulus.register("modal", ModalController)
+
 // -------- Toasts (canto superior direito) --------
 function showToasts() {
   document.querySelectorAll(".toast").forEach((el) => {

@@ -13,6 +13,8 @@ class CoursesController < ApplicationController
   end
 
   def edit
+    @course = Course.find(params[:id])
+    @arranged_nodes = @course.course_nodes.arrange(order: :position)
   end
 
   def create

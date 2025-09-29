@@ -7,8 +7,31 @@
   </div>
 </div>
 
-<div class="card">
+<div class="card mb-4">
   <div class="card-body">
     <%= render "form", course: @course %>
+  </div>
+</div>
+
+<h2 class="h4 mb-3">Estrutura do curso</h2>
+<div class="card">
+  <div class="card-body">
+    <%= render "courses/structure_tree",
+          course: @course,
+          arranged: @arranged_nodes %>
+  </div>
+</div>
+
+<!-- Modal Bootstrap com Turbo Frame dentro -->
+<div data-controller="modal">
+  <div class="modal fade"
+       tabindex="-1"
+       data-modal-target="dialog"
+       data-bs-backdrop="static">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable">
+      <div class="modal-content">
+        <turbo-frame id="modal" data-modal-target="frame"></turbo-frame>
+      </div>
+    </div>
   </div>
 </div>

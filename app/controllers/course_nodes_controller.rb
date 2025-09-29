@@ -10,30 +10,74 @@ class CourseNodesController < ApplicationController
 
   def new
     @node = @course.course_nodes.new(parent_id: params[:parent_id])
+    render layout: false if turbo_frame_request?
+  end
+
+  def edit
+    render layout: false if turbo_frame_request?
   end
 
   def create
     @node = @course.course_nodes.new(node_params)
     if @node.save
-      redirect_to course_nodes_path(@course), notice: "Nó criado com sucesso."
+      respond_to do |format|
+        format.turbo_stream do
+          @arranged = @course.course_nodes.arrange(order: :position)
+          render turbo_stream: [
+            turbo_stream.replace(
+              "structure_tree",
+              partial: "courses/structure_tree",
+              locals: { course: @course, arranged: @arranged }
+            ),
+            # ANTES: turbo_stream.replace("modal", "")
+            turbo_stream.update("modal", "")  # mantém o frame e “esvazia”
+          ]
+        end
+        format.html { redirect_to edit_course_path(@course), notice: "Nó criado." }
+      end
     else
-      render :new, status: :unprocessable_entity
+      render :new, status: :unprocessable_entity, layout: false
     end
   end
 
-  def edit; end
-
   def update
     if @node.update(node_params)
-      redirect_to course_nodes_path(@course), notice: "Nó atualizado com sucesso."
+      respond_to do |format|
+        format.turbo_stream do
+          @arranged = @course.course_nodes.arrange(order: :position)
+          render turbo_stream: [
+            turbo_stream.replace(
+              "structure_tree",
+              partial: "courses/structure_tree",
+              locals: { course: @course, arranged: @arranged }
+            ),
+            # ANTES: turbo_stream.replace("modal", "")
+            turbo_stream.update("modal", "")  # mantém o frame e “esvazia”
+          ]
+        end
+        format.html { redirect_to edit_course_path(@course), notice: "Nó atualizado." }
+      end
     else
-      render :edit, status: :unprocessable_entity
+      render :edit, status: :unprocessable_entity, layout: false
     end
   end
 
   def destroy
     @node.destroy!
-    redirect_to course_nodes_path(@course), notice: "Nó excluído com sucesso."
+    @arranged = @course.course_nodes.arrange(order: :position)
+    respond_to do |format|
+      format.turbo_stream do
+        render turbo_stream: [
+          turbo_stream.replace(
+            "structure_tree",
+            partial: "courses/structure_tree",
+            locals: { course: @course, arranged: @arranged }
+          ),
+          turbo_stream.update("modal", "")   # por consistência
+        ]
+      end
+      format.html { redirect_to course_nodes_path(@course), notice: "Nó excluído." }
+    end
   end
 
   # ----- Ordenação simples (setas ↑/↓) -----

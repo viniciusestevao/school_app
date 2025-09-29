@@ -35,9 +35,20 @@
       <% end %>
 
       <div class="ms-auto d-flex gap-1">
-        <%= link_to "Nova Seção", new_course_node_path(course, parent_id: node.id), class: "btn btn-sm btn-outline-primary" %>
-        <%= link_to "Editar", edit_course_node_path(course, node), class: "btn btn-sm btn-outline-primary" %>
-        <%= link_to "Excluir", course_node_path(course, node), data: { turbo_method: :delete, turbo_confirm: "Excluir “#{node.title}”?" }, class: "btn btn-sm btn-outline-danger" %>
+        <%= link_to "Nova Seção",
+            new_course_node_path(course, parent_id: node.id),
+            data: { turbo_frame: "modal" },
+            class: "btn btn-sm btn-outline-primary" %>
+
+        <%= link_to "Editar",
+            edit_course_node_path(course, node),
+            data: { turbo_frame: "modal" },
+            class: "btn btn-sm btn-outline-primary" %>
+
+        <%= link_to "Excluir",
+              course_node_path(course, node),
+              data: { turbo_method: :delete, turbo_confirm: "Excluir “#{node.title}”?" },
+              class: "btn btn-sm btn-outline-danger" %>
       </div>
     </div>
 
@@ -47,7 +58,7 @@
         data-tree-target="list"
         data-parent-id="<%= node.id %>">
       <% if children.present? %>
-        <%= render partial: "tree", locals: { tree: children, course: course } %>
+        <%= render partial: "course_nodes/tree", locals: { tree: children, course: course } %>
       <% end %>
     </ul>
   </li>

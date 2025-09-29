@@ -1,4 +1,9 @@
-<% content_for :title, "Editar nó" %>
-<div class="card"><div class="card-body">
-  <%= render "form" %>
-</div></div>
+<turbo-frame id="modal">
+  <div class="modal-header">
+    <h5 class="modal-title">Editar nó</h5>
+    <button type="button" class="btn-close" data-action="modal#close"></button>
+  </div>
+  <div class="modal-body">
+    <%= render "course_nodes/form", course: @course, node: @node %>
+  </div>
+</turbo-frame>
