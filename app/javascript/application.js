@@ -3,11 +3,21 @@ import * as bootstrap from "bootstrap"
 import { Application } from "@hotwired/stimulus"
 const Stimulus = Application.start()
 
+import "trix"
+import "@rails/actiontext"
+
+import * as ActiveStorage from "@rails/activestorage"
+ActiveStorage.start()
+
 import TreeController from "./controllers/tree_controller"
 Stimulus.register("tree", TreeController)
 
 import ModalController from "./controllers/modal_controller"
 Stimulus.register("modal", ModalController)
+
+import ActivityFieldsController from "./controllers/activity_fields_controller"
+Stimulus.register("activity-fields", ActivityFieldsController)
+
 
 // -------- Toasts (canto superior direito) --------
 function showToasts() {

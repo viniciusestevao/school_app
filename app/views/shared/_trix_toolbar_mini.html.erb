@@ -1,0 +1,36 @@
+<%# id "trix-toolbar-mini" precisa bater com toolbar: "trix-toolbar-mini" no rich_text_area %>
+<trix-toolbar id="trix-toolbar-mini" class="trix-toolbar">
+  <div class="trix-button-row">
+    <span class="trix-button-group trix-button-group--text-tools">
+      <button type="button" class="trix-button trix-button--icon trix-button--icon-bold"
+              data-trix-attribute="bold" title="Negrito"></button>
+      <button type="button" class="trix-button trix-button--icon trix-button--icon-italic"
+              data-trix-attribute="italic" title="Itálico"></button>
+    </span>
+
+    <span class="trix-button-group trix-button-group--block-tools">
+      <button type="button" class="trix-button trix-button--icon trix-button--icon-heading-1"
+              data-trix-attribute="heading1" title="Título"></button>
+      <button type="button" class="trix-button trix-button--icon trix-button--icon-quote"
+              data-trix-attribute="quote" title="Citação"></button>
+      <button type="button" class="trix-button trix-button--icon trix-button--icon-code"
+              data-trix-attribute="code" title="Código"></button>
+      <button type="button" class="trix-button trix-button--icon trix-button--icon-bullet-list"
+              data-trix-attribute="bullet" title="Lista"></button>
+      <button type="button" class="trix-button trix-button--icon trix-button--icon-number-list"
+              data-trix-attribute="number" title="Lista Numerada"></button>
+    </span>
+
+    <span class="trix-button-group trix-button-group--file-tools">
+      <button type="button" class="trix-button trix-button--icon trix-button--icon-link"
+              data-trix-attribute="href" title="Link"></button>
+
+      <input type="file"
+             class="trix-file-input"
+             accept="image/*,video/*,.pdf,.doc,.docx,.ppt,.pptx,.xls,.xlsx,.txt,.zip">
+
+      <button type="button" class="trix-button trix-button--icon trix-button--icon-attach"
+              data-trix-action="attachFiles" title="Anexar"></button>
+    </span>
+  </div>
+</trix-toolbar>

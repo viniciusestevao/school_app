@@ -2,10 +2,9 @@
 
 #toast-stack { .toast { min-width: 320px; } }
 
-
 /* --- Tooltip leve, sem JS --- */
 .hint {
-  position: relative; /* âncora do tooltip */
+  position: relative;
 }
 
 .hint[data-hint]::after,
@@ -55,7 +54,6 @@
   }
 }
 
-
 .btn-icon {
   --size: 28px;
   width: var(--size);
@@ -75,3 +73,96 @@
 .btn-icon:focus { outline: none; box-shadow: 0 0 0 .2rem rgba(13,110,253,.15); }
 .btn-icon .bi { font-size: 1rem; transition: transform .15s ease; }
 .btn-icon.collapsed .bi-caret-down { transform: rotate(-90deg); }
+
+/* ===== Modal ===== */
+.modal-dialog-scrollable .modal-body {
+  max-height: calc(100vh - 13rem);
+  overflow-y: auto;
+}
+@media (min-width: 992px) {
+  .modal-lg { max-width: 960px; }
+}
+
+/* ===== Trix / ActionText ===== */
+
+/* Toolbar */
+.trix-toolbar {
+  border: 1px solid var(--bs-border-color);
+  border-radius: .5rem;
+  padding: .25rem .5rem;
+  background-color: var(--bs-body-bg);
+  margin-bottom: .25rem;
+}
+
+.trix-toolbar .trix-button {
+  width: 2rem;
+  height: 2rem;
+}
+
+.trix-toolbar .trix-button-group {
+  margin-right: .5rem;
+  border-radius: .5rem;
+}
+
+/* Formulário compacto (usado no modal) */
+.form-condensed .row.mb-3 { margin-bottom: .75rem !important; }
+.form-condensed .form-label { margin-bottom: .25rem; }
+.form-condensed .form-control,
+.form-condensed .form-select { padding-top: .4rem; padding-bottom: .4rem; }
+
+/* Editor */
+trix-editor {
+  min-height: 220px;
+  max-height: 50vh;
+  overflow: auto;
+  border: 1px solid #dee2e6;
+  border-radius: .5rem;
+  padding: .75rem;
+  background: #fff;
+}
+
+trix-editor:focus {
+  outline: 0;
+  border-color: #86b7fe;
+  box-shadow: 0 0 0 .2rem rgba(13,110,253,.25);
+}
+
+/* Attachments no editor */
+trix-editor .attachment {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  padding: .5rem .625rem;
+  margin: .375rem 0;
+  border: 1px dashed #ced4da;
+  border-radius: .5rem;
+  background: #f8f9fa;
+}
+
+trix-editor .attachment--file .attachment__caption {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+}
+
+/* Figures (img/video responsivos) */
+.trix-content figure.attachment { margin: .5rem 0; }
+.trix-content figure.attachment img,
+.trix-content figure.attachment video {
+  max-width: 100%;
+  height: auto;
+  border-radius: .375rem;
+}
+
+/* Toolbar enxuta no modal */
+.modal .trix-button--icon-code,
+.modal .trix-button--icon-strike,
+.modal .trix-button--icon-quote,
+.modal .trix-button--icon-heading-1,
+.modal .trix-button--icon-decrease-nesting-level,
+.modal .trix-button--icon-increase-nesting-level {
+  display: none !important;
+}
+
+/* fallback, caso o CSS do trix não carregue por algum motivo */
+.trix-file-input { display: none; }

@@ -421,6 +421,33 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@rails/actiontext@npm:^8.0.300":
+  version: 8.0.300
+  resolution: "@rails/actiontext@npm:8.0.300"
+  dependencies:
+    "@rails/activestorage": "npm:>= 8.0.0-alpha"
+  peerDependencies:
+    trix: ^2.0.0
+  checksum: 10c0/8f1f8ad80b3cf6c0a9451e7a7ff5fd77834a6949fb393420378193f690704f7c62ec813e091c99c144ce5a24f334b92ad537f524a97dbec9e2ec5f0c79f7e9ae
+  languageName: node
+  linkType: hard
+
+"@rails/activestorage@npm:>= 8.0.0-alpha":
+  version: 8.0.300
+  resolution: "@rails/activestorage@npm:8.0.300"
+  dependencies:
+    spark-md5: "npm:^3.0.1"
+  checksum: 10c0/ab983355dc71254e88800c641240e9c747be94b497e2a97eac591b12ddebb679c48b3d8006f8c486a226f67166cef16694305a4f41010a852029dc1e71ac2f2a
+  languageName: node
+  linkType: hard
+
+"@types/trusted-types@npm:^2.0.7":
+  version: 2.0.7
+  resolution: "@types/trusted-types@npm:2.0.7"
+  checksum: 10c0/4c4855f10de7c6c135e0d32ce462419d8abbbc33713b31d294596c0cc34ae1fa6112a2f9da729c8f7a20707782b0d69da3b1f8df6645b0366d08825ca1522e0c
+  languageName: node
+  linkType: hard
+
 "abbrev@npm:^3.0.0":
   version: 3.0.1
   resolution: "abbrev@npm:3.0.1"
@@ -781,6 +808,18 @@ __metadata:
   bin:
     detect-libc: ./bin/detect-libc.js
   checksum: 10c0/4da0deae9f69e13bc37a0902d78bf7169480004b1fed3c19722d56cff578d16f0e11633b7fbf5fb6249181236c72e90024cbd68f0b9558ae06e281f47326d50d
+  languageName: node
+  linkType: hard
+
+"dompurify@npm:^3.2.5":
+  version: 3.2.7
+  resolution: "dompurify@npm:3.2.7"
+  dependencies:
+    "@types/trusted-types": "npm:^2.0.7"
+  dependenciesMeta:
+    "@types/trusted-types":
+      optional: true
+  checksum: 10c0/d41bb31a72f1acdf9b84c56723c549924b05d92a39a15bd8c40bec9007ff80d5fccf844bc53ee12af5b69044f9a7ce24a1e71c267a4f49cf38711379ed8c1363
   languageName: node
   linkType: hard
 
@@ -2196,12 +2235,14 @@ __metadata:
     "@hotwired/stimulus": "npm:^3.2.2"
     "@hotwired/turbo-rails": "npm:^8.0.16"
     "@popperjs/core": "npm:^2.11.8"
+    "@rails/actiontext": "npm:^8.0.300"
     bootstrap: "npm:^5.3.8"
     bootstrap-icons: "npm:^1.13.1"
     esbuild: "npm:^0.25.10"
     npm-run-all: "npm:^4.1.5"
     sass: "npm:^1.92.1"
     sortablejs: "npm:^1.15.6"
+    trix: "npm:^2.1.15"
   languageName: unknown
   linkType: soft
 
@@ -2393,6 +2434,13 @@ __metadata:
   version: 1.2.1
   resolution: "source-map-js@npm:1.2.1"
   checksum: 10c0/7bda1fc4c197e3c6ff17de1b8b2c20e60af81b63a52cb32ec5a5d67a20a7d42651e2cb34ebe93833c5a2a084377e17455854fee3e21e7925c64a51b6a52b0faf
+  languageName: node
+  linkType: hard
+
+"spark-md5@npm:^3.0.1":
+  version: 3.0.2
+  resolution: "spark-md5@npm:3.0.2"
+  checksum: 10c0/3fd11735eac5e7d60d6006d99ac0a055f148a89e9baf5f0b51ac103022dec30556b44190b37f6737ca50f81e8e50dc13e724f9edf6290c412ff5ab2101ce7780
   languageName: node
   linkType: hard
 
@@ -2592,6 +2640,15 @@ __metadata:
   dependencies:
     is-number: "npm:^7.0.0"
   checksum: 10c0/487988b0a19c654ff3e1961b87f471702e708fa8a8dd02a298ef16da7206692e8552a0250e8b3e8759270f62e9d8314616f6da274734d3b558b1fc7b7724e892
+  languageName: node
+  linkType: hard
+
+"trix@npm:^2.1.15":
+  version: 2.1.15
+  resolution: "trix@npm:2.1.15"
+  dependencies:
+    dompurify: "npm:^3.2.5"
+  checksum: 10c0/fb1b53d03e13d007a21c7417bbc994b24073a48d51b94bee679f8bb748b2e2cf9469372b3292d40f27bf502a88ab27d43a0c3c08928b708f65741c1f9eca7c77
   languageName: node
   linkType: hard
 

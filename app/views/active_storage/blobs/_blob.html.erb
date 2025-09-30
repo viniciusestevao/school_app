@@ -1,0 +1,53 @@
+<figure class="attachment attachment--<%= blob.image? ? 'image' : blob.video? ? 'video' : blob.audio? ? 'audio' : 'file' %> attachment--<%= blob.filename.extension %> mb-3">
+  <%# IMAGEM (com variant/redimensionamento) %>
+  <% if blob.image? %>
+    <%= image_tag blob.representation(
+          resize_to_limit: (local_assigns[:in_gallery] ? [800, 600] : [1024, 768])
+        ),
+        class: "img-fluid rounded border" %>
+
+  <%# VÍDEO: toca inline (mp4/webm etc) %>
+  <% elsif blob.video? %>
+    <div class="ratio ratio-16x9 border rounded">
+      <%= video_tag url_for(blob),
+            controls: true,
+            preload: "metadata",
+            class: "w-100 h-100" %>
+    </div>
+
+  <%# ÁUDIO: toca inline %>
+  <% elsif blob.audio? %>
+    <div class="border rounded p-2">
+      <%= audio_tag url_for(blob), controls: true, class: "w-100" %>
+    </div>
+
+  <%# OUTROS (PDF, zip, docx, etc.) %>
+  <% else %>
+    <div class="d-flex align-items-center gap-2 border rounded p-2 bg-light">
+      <i class="bi bi-file-earmark-text fs-4 text-muted"></i>
+      <div>
+        <strong><%= blob.filename %></strong>
+        <small class="text-muted d-block"><%= number_to_human_size blob.byte_size %></small>
+      </div>
+      <div class="ms-auto d-flex gap-2">
+        <%= link_to "Baixar",
+            rails_blob_path(blob, disposition: "attachment"),
+            class: "btn btn-sm btn-outline-secondary" %>
+
+        <%# Se o navegador suportar (pdf, txt, imagem), abrir em nova aba %>
+        <%= link_to "Abrir",
+            url_for(blob),
+            target: "_blank",
+            rel: "noopener",
+            class: "btn btn-sm btn-outline-primary" %>
+      </div>
+    </div>
+  <% end %>
+
+  <%# CAPTION (se houver) %>
+  <figcaption class="attachment__caption mt-1 small text-muted">
+    <% if (caption = blob.try(:caption)).present? %>
+      <%= caption %>
+    <% end %>
+  </figcaption>
+</figure>

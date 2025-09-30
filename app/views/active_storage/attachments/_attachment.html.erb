@@ -1,0 +1,10 @@
+<%# Render para anexos sem preview (ex.: .txt, .csv, .zip, .docx) %>
+<div class="d-inline-flex align-items-center gap-2 border rounded px-2 py-1 bg-light mb-2">
+  <i class="bi bi-file-earmark-text"></i>
+  <span class="small"><%= attachment.blob.filename.to_s %></span>
+  <span class="small text-muted">(<%= number_to_human_size attachment.blob.byte_size %>)</span>
+
+  <%= link_to "Baixar",
+      rails_blob_path(attachment.blob, disposition: "attachment"),
+      class: "btn btn-sm btn-outline-secondary" %>
+</div>

@@ -1,48 +1,111 @@
 <%= form_with model: node,
-              url: (node.persisted? ?
-                     course_node_path(course, node) :
-                     course_nodes_path(course)),
-              class: "needs-validation",
+              url: (node.persisted? ? course_node_path(course, node) : course_nodes_path(course)),
+              class: "needs-validation form-condensed",
               data: { turbo: true } do |f| %>
 
   <% if node.errors.any? %>
     <div class="alert alert-danger">
       <strong><%= pluralize(node.errors.count, "erro") %> impediram salvar:</strong>
       <ul class="mb-0">
-        <% node.errors.full_messages.each do |msg| %><li><%= msg %></li><% end %>
+        <% node.errors.full_messages.each do |m| %>
+          <li><%= m %></li>
+        <% end %>
       </ul>
     </div>
   <% end %>
 
-  <div class="row">
-    <div class="col-md-6 mb-3">
-      <%= f.label :title, "Título", class: "form-label" %>
-      <%= f.text_field :title, class: "form-control", required: true %>
+  <% show_activity = node.kind.to_s == "activity" || node.activity.present? %>
+
+  <!-- ===== Controller engloba nó + atividade ===== -->
+  <div data-controller="activity-fields">
+
+    <!-- ===== Dados do nó ===== -->
+    <h5 class="mb-3">Dados do nó</h5>
+
+    <div class="row mb-4">
+      <div class="col-md-6 mb-3">
+        <%= f.label :title, "Título", class: "form-label" %>
+        <%= f.text_field :title, class: "form-control", required: true %>
+      </div>
+
+      <div class="col-md-3 mb-3">
+        <%= f.label :kind, "Tipo", class: "form-label" %>
+        <%= f.select :kind,
+              CourseNode.kinds.keys.map { |k| [k.humanize, k] },
+              {},
+              class: "form-select",
+              data: {
+                action: "change->activity-fields#toggle",
+                activity_fields_target: "kindSelect"
+              } %>
+      </div>
+
+      <div class="col-md-3 mb-3">
+        <%= f.label :parent_id, "Pertence a", class: "form-label" %>
+        <%= f.select :parent_id,
+              options_for_select(parent_options(course, node), node.parent_id),
+              { include_blank: "Curso" },
+              class: "form-select" %>
+      </div>
     </div>
 
-    <div class="col-md-3 mb-3">
-      <%= f.label :kind, "Tipo", class: "form-label" %>
-      <%= f.select :kind, CourseNode.kinds.keys.map { |k| [k.humanize, k] },
-                   {}, class: "form-select" %>
+    <div class="mb-3">
+      <%= f.label :description, "Resumo", class: "form-label" %>
+      <%= f.text_area :description, rows: 2, class: "form-control" %>
     </div>
 
-    <div class="col-md-3 mb-3">
-      <%= f.label :parent_id, "Pertence a", class: "form-label" %>
-      <%= f.select :parent_id,
-                   options_for_select(parent_options(course, node), node.parent_id),
-                   { include_blank: "Curso" },
-                   class: "form-select" %>
-    </div>
-  </div>
+    <hr class="my-3">
 
-  <div class="mb-3">
-    <%= f.label :description, "Descrição", class: "form-label" %>
-    <%= f.text_area :description, rows: 4, class: "form-control" %>
-  </div>
+    <!-- ===== Atividade (só quando kind == activity) ===== -->
+    <div class="pt-2 mt-1 <%= 'd-none' unless show_activity %>"
+         data-activity-fields-target="activityWrap">
+
+      <h5 class="mb-2">Atividade</h5>
+
+      <%= f.fields_for :activity do |af| %>
+        <div class="row mb-3">
+          <div class="col-md-6 mb-3">
+            <%= af.label :title, "Título da atividade", class: "form-label" %>
+            <%= af.text_field :title, class: "form-control" %>
+          </div>
+
+          <div class="col-md-3 mb-3">
+            <%= af.label :points, "Pontuação", class: "form-label" %>
+            <%= af.number_field :points, class: "form-control", min: 0 %>
+          </div>
+
+          <div class="col-md-3 mb-3">
+            <%= af.label :due_at, "Prazo (opcional)", class: "form-label" %>
+            <%= af.datetime_field :due_at, class: "form-control" %>
+          </div>
+        </div>
+
+        <div class="row mb-3">
+          <div class="col-md-3 mb-3">
+            <%= af.label :submission_type, "Tipo de entrega", class: "form-label" %>
+            <%= af.select :submission_type,
+                  Activity.submission_types.keys.map { |k| [k.humanize, k] },
+                  {}, class: "form-select" %>
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <%= af.label :content, "Descrição da Atividade", class: "form-label" %>
+          <%= render "shared/trix_toolbar_mini" %>
+          <%= af.rich_text_area :content,
+                class: "trix-content",
+                toolbar: "trix-toolbar-mini" %>
+
+          <small class="text-muted d-block mt-1">
+            Suporta textos, imagens, vídeos (mp4/webm) e links YouTube/Vimeo (convertidos em embed na exibição).
+          </small>
+        </div>
+      <% end %>
+    </div>
+  </div><!-- /data-controller -->
 
   <div class="d-flex justify-content-end gap-2">
     <button type="button" class="btn btn-outline-secondary" data-action="modal#close">Cancelar</button>
-    <%= f.submit node.persisted? ? "Salvar alterações" : "Criar nó",
-                 class: "btn btn-primary" %>
+    <%= f.submit node.persisted? ? "Salvar alterações" : "Criar nó", class: "btn btn-primary" %>
   </div>
 <% end %>

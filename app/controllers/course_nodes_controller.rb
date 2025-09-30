@@ -10,10 +10,12 @@ class CourseNodesController < ApplicationController
 
   def new
     @node = @course.course_nodes.new(parent_id: params[:parent_id])
+    @node.build_activity # prepara o nested form
     render layout: false if turbo_frame_request?
   end
 
   def edit
+    @node.build_activity unless @node.activity
     render layout: false if turbo_frame_request?
   end
 
@@ -29,7 +31,6 @@ class CourseNodesController < ApplicationController
               partial: "courses/structure_tree",
               locals: { course: @course, arranged: @arranged }
             ),
-            # ANTES: turbo_stream.replace("modal", "")
             turbo_stream.update("modal", "")  # mantém o frame e “esvazia”
           ]
         end
@@ -51,7 +52,6 @@ class CourseNodesController < ApplicationController
               partial: "courses/structure_tree",
               locals: { course: @course, arranged: @arranged }
             ),
-            # ANTES: turbo_stream.replace("modal", "")
             turbo_stream.update("modal", "")  # mantém o frame e “esvazia”
           ]
         end
@@ -73,7 +73,7 @@ class CourseNodesController < ApplicationController
             partial: "courses/structure_tree",
             locals: { course: @course, arranged: @arranged }
           ),
-          turbo_stream.update("modal", "")   # por consistência
+          turbo_stream.update("modal", "")
         ]
       end
       format.html { redirect_to course_nodes_path(@course), notice: "Nó excluído." }
@@ -129,7 +129,11 @@ class CourseNodesController < ApplicationController
     end
 
     def node_params
-      params.require(:course_node).permit(:title, :description, :kind, :parent_id)
+      params.require(:course_node)
+            .permit(
+              :title, :description, :kind, :parent_id,
+              activity_attributes: [:id, :title, :points, :due_at, :submission_type, :content]
+            )
             .merge(course_id: @course.id)
     end
 end

@@ -4,11 +4,22 @@ class CourseNode < ApplicationRecord
   has_ancestry orphan_strategy: :adopt
   acts_as_list scope: [:course_id, :ancestry]
 
-  # sem conflito com ActiveRecord#group e com prefixo "kind_"
   enum :kind, { container: 0, activity: 1, resource: 2 }, prefix: true
+
+  has_one :activity, dependent: :destroy
+  accepts_nested_attributes_for :activity, allow_destroy: true
 
   validates :title, presence: true
   validate :parent_same_course
+
+  # Valida que activity existe quando kind == activity
+  # validate :activity_presence_for_activity_kind
+  #
+  # def activity_presence_for_activity_kind
+  #   if kind == "activity" && activity.blank?
+  #     errors.add(:base, "Atividade é obrigatória para nós do tipo Activity")
+  #   end
+  # end
 
   def leaf? = children.empty?
   def activity_leaf? = kind_activity? && leaf?
