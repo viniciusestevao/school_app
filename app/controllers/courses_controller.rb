@@ -1,9 +1,18 @@
 class CoursesController < ApplicationController
   before_action :set_course, only: %i[ show edit update destroy ]
+  rescue_from Pagy::OverflowError, with: :redirect_to_last_page
+
+  SORTABLE_COLUMNS = %w[title description created_at].freeze
 
   def index
-    @courses = Course.all
+    sort = params[:sort].presence_in(SORTABLE_COLUMNS) || 'created_at'
+    dir  = params[:dir].in?(%w[asc desc]) ? params[:dir] : 'desc'
+
+    scope = Course.order("#{sort} #{dir}")   # seguro porque sort vem da whitelist
+
+    @pagy, @courses = pagy(scope, items: (params[:items] || Pagy::DEFAULT[:items]))
   end
+
 
   def show
   end
@@ -21,7 +30,7 @@ class CoursesController < ApplicationController
     @course = Course.new(course_params)
 
     if @course.save
-      redirect_to courses_path, notice: "Curso criado com sucesso."
+      redirect_to courses_path(page: params[:page]), notice: "Curso criado com sucesso."
     else
       render :new, status: :unprocessable_entity
     end
@@ -29,7 +38,7 @@ class CoursesController < ApplicationController
 
   def update
     if @course.update(course_params)
-      redirect_to courses_path, notice: "Curso atualizado com sucesso."
+      redirect_to courses_path(page: params[:page]), notice: "Curso atualizado com sucesso."
     else
       render :edit, status: :unprocessable_entity
     end
@@ -37,7 +46,7 @@ class CoursesController < ApplicationController
 
   def destroy
     @course.destroy!
-    redirect_to courses_path, notice: "Curso excluído com sucesso."
+    redirect_to courses_path(page: params[:page]), notice: "Curso excluído com sucesso."
   end
 
   private
@@ -47,5 +56,9 @@ class CoursesController < ApplicationController
 
     def course_params
       params.require(:course).permit(:title, :description)
+    end
+
+    def redirect_to_last_page(error)
+      redirect_to url_for(page: error.pagy.last)
     end
 end

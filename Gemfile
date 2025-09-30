@@ -18,6 +18,7 @@ gem "stimulus-rails"
 gem "cssbundling-rails"
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
 gem "jbuilder"
+gem 'rails-i18n'
 
 # Use Active Model has_secure_password [https://guides.rubyonrails.org/active_model_basics.html#securepassword]
 # gem "bcrypt", "~> 3.1.7"
@@ -27,6 +28,7 @@ gem 'devise'
 gem 'devise-i18n'
 gem "ancestry"       # árvore (parent/children, depth, subtree, etc.)
 gem "acts_as_list"   # ordenação entre irmãos (position)
+gem 'pagy'
 
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem

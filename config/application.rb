@@ -16,6 +16,14 @@ module SchoolApp
     # Common ones are `templates`, `generators`, or `middleware`, for example.
     config.autoload_lib(ignore: %w[assets tasks])
 
+    # Fuso padrão da aplicação (exibição/Time.zone)
+    config.time_zone = 'America/Sao_Paulo'
+    # Banco em UTC (boa prática – mantenha assim)
+    config.active_record.default_timezone = :utc
+    # Locale padrão pt-BR (ver passo 2 para rails-i18n)
+    config.i18n.default_locale = :'pt-BR'
+    config.i18n.available_locales = [:'pt-BR', :en]
+
     # Configuration for the application, engines, and railties goes here.
     #
     # These settings can be overridden in specific environments using the files

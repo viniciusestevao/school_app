@@ -11,8 +11,9 @@
       <table class="table table-hover align-middle m-0">
         <thead class="table-light">
           <tr>
-            <th>Título</th>
-            <th>Descrição</th>
+            <th><%= sort_link('title', 'Título') %></th>
+            <th><%= sort_link('description', 'Descrição') %></th>
+            <th class="text-nowrap"><%= sort_link('created_at', 'Criado em') %></th>
             <th class="text-end">Ações</th>
           </tr>
         </thead>
@@ -20,21 +21,29 @@
           <% @courses.each do |course| %>
             <tr id="<%= dom_id(course) %>">
               <td><%= course.title %></td>
-              <td class="text-muted">
-                <%= truncate(course.description.to_s, length: 120) %>
-              </td>
+              <td class="text-muted"><%= truncate(course.description.to_s, length: 120) %></td>
+              <td class="text-muted text-nowrap"><%= l(course.created_at, format: :short) %></td>
               <td class="text-end">
-                <%= link_to "Ver", course, class: "btn btn-sm btn-outline-secondary me-1" %>
-                <%= link_to "Editar", edit_course_path(course), class: "btn btn-sm btn-outline-primary me-1" %>
+                <%= link_to "Ver",    course_path(course, page: params[:page], sort: params[:sort], dir: params[:dir], items: params[:items]), class: "btn btn-sm btn-outline-secondary me-1" %>
+                <%= link_to "Editar", edit_course_path(course,  page: params[:page], sort: params[:sort], dir: params[:dir], items: params[:items]), class: "btn btn-sm btn-outline-primary me-1" %>
                 <%= link_to "Excluir", course,
-                      data: { turbo_method: :delete,
-                              turbo_confirm: "Tem certeza que deseja excluir o curso “#{course.title}”?" },
+                      data: { turbo_method: :delete, turbo_confirm: "Tem certeza que deseja excluir o curso “#{course.title}”?" },
                       class: "btn btn-sm btn-outline-danger" %>
               </td>
             </tr>
           <% end %>
         </tbody>
       </table>
+    </div>
+
+    <!-- Footer de paginação -->
+    <div class="card-footer d-flex flex-column flex-md-row justify-content-between align-items-center">
+      <div class="mb-2 mb-md-0 small text-muted">
+        <%== pagy_info(@pagy) %>
+      </div>
+      <div class="d-flex align-items-center gap-2">
+        <%== pagy_bootstrap_nav(@pagy) if @pagy.pages > 1 %>
+      </div>
     </div>
   </div>
 <% else %>

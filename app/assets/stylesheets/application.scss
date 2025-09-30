@@ -166,3 +166,12 @@ trix-editor .attachment--file .attachment__caption {
 
 /* fallback, caso o CSS do trix não carregue por algum motivo */
 .trix-file-input { display: none; }
+
+/* paginação */
+.pagy-bootstrap-nav .pagination {
+  margin-bottom: 0;
+}
+
+/* botão de ordenação das colunas do course index */
+th a .sort-icon { font-size: .8em; margin-left: .25rem; opacity: .75; }
+th a:hover { text-decoration: underline !important; }
