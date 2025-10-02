@@ -1,4 +1,6 @@
 class CoursesController < ApplicationController
+  before_action :authenticate_user!
+  before_action :require_admin!, only: %i[ edit update destroy ]
   before_action :set_course, only: %i[ show edit update destroy ]
   rescue_from Pagy::OverflowError, with: :redirect_to_last_page
 
@@ -12,7 +14,6 @@ class CoursesController < ApplicationController
 
     @pagy, @courses = pagy(scope, items: (params[:items] || Pagy::DEFAULT[:items]))
   end
-
 
   def show
   end

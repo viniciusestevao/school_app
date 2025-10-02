@@ -1,0 +1,51 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom shadow-sm">
+    <div class="container-fluid">
+        <!-- Logo/Home -->
+        <%= link_to "SCHOOL APP", root_path, class: "navbar-brand fw-bold" %>
+
+        <!-- Botão mobile -->
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMain"
+                aria-controls="navbarMain" aria-expanded="false" aria-label="Alternar navegação">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarMain">
+          <!-- Esquerda -->
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <!-- Cadastros -->
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="dropCadastros" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                Cadastros
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="dropCadastros">
+                <li><%= link_to "Cursos", courses_path, class: "dropdown-item" %></li>
+              </ul>
+            </li>
+          </ul>
+
+          <!-- Direita (Devise) -->
+          <ul class="navbar-nav">
+            <% if user_signed_in? %>
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="userMenu" role="button"
+                  data-bs-toggle="dropdown" aria-expanded="false">
+                  <%= current_user.name.presence || current_user.email %>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userMenu">
+                  <li><%= link_to "Perfil", edit_user_registration_path, class: "dropdown-item" %></li>
+                  <li><hr class="dropdown-divider"></li>
+                  <li><%= link_to "Sair", destroy_user_session_path,
+                                  data: { turbo_method: :delete },
+                                  class: "dropdown-item text-danger" %></li>
+                </ul>
+              </li>
+            <% else %>
+              <li class="nav-item"><%= link_to "Entrar", new_user_session_path, class: "nav-link" %></li>
+              <li class="nav-item"><%= link_to "Cadastrar", new_user_registration_path, class: "nav-link" %></li>
+            <% end %>
+          </ul>
+
+
+        </div>
+    </div>
+</nav>

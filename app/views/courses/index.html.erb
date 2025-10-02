@@ -2,7 +2,9 @@
 
 <div class="d-flex justify-content-between align-items-center mb-3">
   <h1 class="h3 m-0">Cursos</h1>
-  <%= link_to "Novo curso", new_course_path, class: "btn btn-primary" %>
+  <% if current_user.admin? %>
+    <%= link_to "Novo curso", new_course_path, class: "btn btn-primary" %>
+  <% end %>
 </div>
 
 <% if @courses.any? %>
@@ -25,10 +27,13 @@
               <td class="text-muted text-nowrap"><%= l(course.created_at, format: :short) %></td>
               <td class="text-end">
                 <%= link_to "Ver",    course_path(course, page: params[:page], sort: params[:sort], dir: params[:dir], items: params[:items]), class: "btn btn-sm btn-outline-secondary me-1" %>
-                <%= link_to "Editar", edit_course_path(course,  page: params[:page], sort: params[:sort], dir: params[:dir], items: params[:items]), class: "btn btn-sm btn-outline-primary me-1" %>
-                <%= link_to "Excluir", course,
-                      data: { turbo_method: :delete, turbo_confirm: "Tem certeza que deseja excluir o curso “#{course.title}”?" },
-                      class: "btn btn-sm btn-outline-danger" %>
+                <% if current_user.admin? %>
+                  <%= link_to "Editar", edit_course_path(course), class: "btn btn-sm btn-outline-primary me-1" %>
+                  <%= link_to "Excluir", course,
+                        data: { turbo_method: :delete,
+                                turbo_confirm: "Tem certeza que deseja excluir o curso “#{course.title}”?" },
+                        class: "btn btn-sm btn-outline-danger" %>
+                <% end %>
               </td>
             </tr>
           <% end %>
