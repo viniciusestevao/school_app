@@ -18,6 +18,8 @@ Stimulus.register("modal", ModalController)
 import ActivityFieldsController from "./controllers/activity_fields_controller"
 Stimulus.register("activity-fields", ActivityFieldsController)
 
+import PeriodFieldsController from "./controllers/period_fields_controller"
+Stimulus.register("period-fields", PeriodFieldsController)
 
 // -------- Toasts (canto superior direito) --------
 function showToasts() {

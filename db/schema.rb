@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_09_30_025606) do
+ActiveRecord::Schema[8.0].define(version: 2025_10_02_165653) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -63,6 +63,27 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_30_025606) do
     t.index ["course_node_id"], name: "index_activities_on_course_node_id", unique: true
   end
 
+  create_table "classroom_enrollments", force: :cascade do |t|
+    t.bigint "classroom_id", null: false
+    t.bigint "user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["classroom_id", "user_id"], name: "index_classroom_enrollments_on_classroom_id_and_user_id", unique: true
+    t.index ["classroom_id"], name: "index_classroom_enrollments_on_classroom_id"
+    t.index ["user_id"], name: "index_classroom_enrollments_on_user_id"
+  end
+
+  create_table "classrooms", force: :cascade do |t|
+    t.string "title"
+    t.text "description"
+    t.bigint "course_id", null: false
+    t.bigint "teacher_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["course_id"], name: "index_classrooms_on_course_id"
+    t.index ["teacher_id"], name: "index_classrooms_on_teacher_id"
+  end
+
   create_table "course_nodes", force: :cascade do |t|
     t.bigint "course_id", null: false
     t.string "title", null: false
@@ -83,6 +104,16 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_30_025606) do
     t.text "description"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "periods", force: :cascade do |t|
+    t.bigint "course_node_id", null: false
+    t.integer "kind", default: 0, null: false
+    t.integer "interval_days"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "lessons_per_period", default: 1, null: false
+    t.index ["course_node_id"], name: "index_periods_on_course_node_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -115,5 +146,10 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_30_025606) do
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "activities", "course_nodes"
+  add_foreign_key "classroom_enrollments", "classrooms"
+  add_foreign_key "classroom_enrollments", "users"
+  add_foreign_key "classrooms", "courses"
+  add_foreign_key "classrooms", "users", column: "teacher_id"
   add_foreign_key "course_nodes", "courses"
+  add_foreign_key "periods", "course_nodes"
 end

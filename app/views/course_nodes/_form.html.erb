@@ -56,7 +56,32 @@
 
     <hr class="my-3">
 
-    <!-- ===== Atividade (só quando kind == activity) ===== -->
+    <!-- ===== Período ===== -->
+    <h5 class="mb-2">Período</h5>
+    <%= f.fields_for :period do |pf| %>
+      <div data-controller="period-fields">
+        <div class="row mb-3">
+          <div class="col-md-4">
+            <%= pf.label :kind, "Tipo de período", class: "form-label" %>
+            <%= pf.select :kind, Period.kinds.keys.map { |k| [k.humanize, k] },
+                  {}, class: "form-select",
+                  data: { action: "change->period-fields#toggle" } %>
+          </div>
+
+          <div class="col-md-4">
+            <%= pf.label :lessons_per_period, "Aulas por período", class: "form-label" %>
+            <%= pf.number_field :lessons_per_period, class: "form-control", min: 1 %>
+          </div>
+
+          <div class="col-md-4" data-period-fields-target="daysField">
+            <%= pf.label :interval_days, "Intervalo (dias)", class: "form-label" %>
+            <%= pf.number_field :interval_days, class: "form-control", min: 1 %>
+          </div>
+        </div>
+      </div>
+    <% end %>
+
+    <!-- ===== Atividade (quando kind == activity) ===== -->
     <div class="pt-2 mt-1 <%= 'd-none' unless show_activity %>"
          data-activity-fields-target="activityWrap">
 

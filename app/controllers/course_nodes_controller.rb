@@ -132,7 +132,8 @@ class CourseNodesController < ApplicationController
       params.require(:course_node)
             .permit(
               :title, :description, :kind, :parent_id,
-              activity_attributes: [:id, :title, :points, :due_at, :submission_type, :content]
+              activity_attributes: [:id, :title, :points, :due_at, :submission_type, :content],
+              period_attributes: [:id, :kind, :lessons_per_period, :interval_days, :_destroy]
             )
             .merge(course_id: @course.id)
     end

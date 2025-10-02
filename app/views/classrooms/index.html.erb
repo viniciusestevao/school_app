@@ -1,0 +1,56 @@
+<% content_for :title, "Turmas" %>
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h1 class="h3 m-0">Turmas</h1>
+  <%= link_to "Nova turma", new_classroom_path, class: "btn btn-primary" %>
+</div>
+
+<% if @classrooms.any? %>
+  <div class="card">
+    <div class="table-responsive">
+      <table class="table table-hover align-middle m-0">
+        <thead class="table-light">
+          <tr>
+            <th><%= sort_link('title', 'Título') %></th>
+            <th><%= sort_link('course_id', 'Curso') %></th>
+            <th><%= sort_link('teacher_id', 'Professor') %></th>
+            <th class="text-nowrap"><%= sort_link('created_at', 'Criado em') %></th>
+            <th class="text-end">Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @classrooms.each do |classroom| %>
+            <tr id="<%= dom_id(classroom) %>">
+              <td><%= classroom.title %></td>
+              <td class="text-muted"><%= classroom.course&.title %></td>
+              <td class="text-muted"><%= classroom.teacher&.name %></td>
+              <td class="text-muted text-nowrap"><%= l(classroom.created_at, format: :short) %></td>
+              <td class="text-end">
+                <%= link_to "Ver",    classroom, class: "btn btn-sm btn-outline-secondary me-1" %>
+                <%= link_to "Editar", edit_classroom_path(classroom), class: "btn btn-sm btn-outline-primary me-1" %>
+                <%= link_to "Excluir", classroom,
+                      data: { turbo_method: :delete,
+                              turbo_confirm: "Tem certeza que deseja excluir a turma “#{classroom.title}”?" },
+                      class: "btn btn-sm btn-outline-danger" %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card-footer d-flex flex-column flex-md-row justify-content-between align-items-center">
+      <div class="mb-2 mb-md-0 small text-muted">
+        <%== pagy_info(@pagy) %>
+      </div>
+      <div class="d-flex align-items-center gap-2">
+        <%== pagy_bootstrap_nav(@pagy) if @pagy.pages > 1 %>
+      </div>
+    </div>
+  </div>
+<% else %>
+  <div class="text-center p-5 border rounded-3 bg-light">
+    <p class="mb-3">Nenhuma turma cadastrada ainda.</p>
+    <%= link_to "Cadastrar primeira turma", new_classroom_path, class: "btn btn-primary" %>
+  </div>
+<% end %>
