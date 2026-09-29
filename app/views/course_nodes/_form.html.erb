@@ -14,7 +14,7 @@
     </div>
   <% end %>
 
-  <% show_activity = node.kind.to_s == "activity" || node.activity.present? %>
+  <% show_activity = node.kind.to_s == "activity" %>
 
   <!-- ===== Controller engloba nó + atividade ===== -->
   <div data-controller="activity-fields">
@@ -63,6 +63,7 @@
       <h5 class="mb-2">Atividade</h5>
 
       <%= f.fields_for :activity do |af| %>
+        <%= af.hidden_field :_destroy, value: 0, data: { activity_fields_target: "destroyField" } %>
         <div class="row mb-3">
           <div class="col-md-6 mb-3">
             <%= af.label :title, "Título da atividade", class: "form-label" %>

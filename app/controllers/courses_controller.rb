@@ -1,6 +1,6 @@
 class CoursesController < ApplicationController
   before_action :authenticate_user!
-  before_action :require_admin!, only: %i[ edit update destroy ]
+  before_action :require_admin!, only: %i[new create edit update destroy]
   before_action :set_course, only: %i[ show edit update destroy ]
   rescue_from Pagy::OverflowError, with: :redirect_to_last_page
 
@@ -12,7 +12,7 @@ class CoursesController < ApplicationController
 
     scope = Course.order("#{sort} #{dir}")   # seguro porque sort vem da whitelist
 
-    @pagy, @courses = pagy(scope, items: (params[:items] || Pagy::DEFAULT[:items]))
+    @pagy, @courses = pagy(scope, items: items_per_page)
   end
 
   def show
@@ -61,5 +61,10 @@ class CoursesController < ApplicationController
 
     def redirect_to_last_page(error)
       redirect_to url_for(page: error.pagy.last)
+    end
+
+    def items_per_page
+      requested_items = params[:items].to_i
+      [10, 25, 50].include?(requested_items) ? requested_items : Pagy::DEFAULT[:items]
     end
 end

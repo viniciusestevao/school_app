@@ -1,6 +1,8 @@
 class CourseNodesController < ApplicationController
+  before_action :authenticate_user!
+  before_action :require_admin!
   before_action :set_course
-  before_action :set_node, only: %i[edit update destroy move_up move_down reparent]
+  before_action :set_node, only: %i[edit update destroy move_up move_down reparent reorder]
 
   def index
     @nodes = @course.course_nodes.order(:ancestry, :position)
@@ -93,28 +95,42 @@ class CourseNodesController < ApplicationController
 
   # ----- (Opcional) Trocar o pai via select/POST -----
   def reparent
-    new_parent = @course.course_nodes.find_by(id: params[:parent_id])
+    new_parent_id = params[:parent_id].presence
+    new_parent = @course.course_nodes.find_by(id: new_parent_id)
+    if new_parent_id && new_parent.nil?
+      redirect_to course_nodes_path(@course), alert: "O nó de destino não foi encontrado."
+      return
+    end
+
+    unless valid_parent_for?(@node, new_parent)
+      redirect_to course_nodes_path(@course), alert: "Um nó não pode ser movido para dentro da própria estrutura."
+      return
+    end
+
     @node.parent = new_parent
     @node.save!
     redirect_to course_nodes_path(@course), notice: "Estrutura atualizada."
   end
 
   def reorder
-    node = @course.course_nodes.find(params[:id])
-
-    # mudar de pai (se necessário)
     new_parent_id = params[:parent_id].presence
-    if node.parent_id.to_s != new_parent_id.to_s
-      node.parent_id = new_parent_id
+    new_parent = @course.course_nodes.find_by(id: new_parent_id)
+    if new_parent_id && new_parent.nil?
+      head :unprocessable_entity
+      return
     end
 
-    # posicionar entre os irmãos (1-based)
+    unless valid_parent_for?(@node, new_parent)
+      head :unprocessable_entity
+      return
+    end
+
     new_position = params[:position].to_i
     new_position = 1 if new_position < 1
 
-    # Salva e reposiciona no escopo
-    node.save! if node.changed?
-    node.insert_at(new_position)
+    @node.parent = new_parent
+    @node.save! if @node.changed?
+    @node.insert_at(new_position)
 
     head :ok
   end
@@ -132,8 +148,12 @@ class CourseNodesController < ApplicationController
       params.require(:course_node)
             .permit(
               :title, :description, :kind, :parent_id,
-              activity_attributes: [:id, :title, :points, :due_at, :submission_type, :content]
+              activity_attributes: [:id, :title, :points, :due_at, :submission_type, :content, :_destroy]
             )
             .merge(course_id: @course.id)
+    end
+
+    def valid_parent_for?(node, new_parent)
+      new_parent.nil? || !node.subtree_ids.include?(new_parent.id)
     end
 end

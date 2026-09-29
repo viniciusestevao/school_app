@@ -1,2 +1,42 @@
-<h1>Dashboard#index</h1>
-<p>Find me in app/views/dashboard/index.html.erb</p>
+<% content_for :title, "Painel" %>
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <div>
+    <h1 class="h3 mb-1">Painel</h1>
+    <p class="text-muted mb-0">Visão geral do conteúdo disponível.</p>
+  </div>
+  <%= link_to "Ver cursos", courses_path, class: "btn btn-primary" %>
+</div>
+
+<div class="row g-3 mb-4">
+  <div class="col-md-6">
+    <div class="card h-100"><div class="card-body">
+      <div class="text-muted small">Cursos</div>
+      <div class="display-6"><%= @course_count %></div>
+    </div></div>
+  </div>
+  <div class="col-md-6">
+    <div class="card h-100"><div class="card-body">
+      <div class="text-muted small">Atividades</div>
+      <div class="display-6"><%= @activity_count %></div>
+    </div></div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-body">
+    <h2 class="h5">Próximos prazos</h2>
+    <% if @upcoming_activities.any? %>
+      <ul class="list-group list-group-flush">
+        <% @upcoming_activities.each do |activity| %>
+          <li class="list-group-item px-0 d-flex justify-content-between gap-3">
+            <span><strong><%= activity.title %></strong><br><small class="text-muted"><%= activity.course_node.course.title %></small></span>
+            <span class="text-nowrap"><%= l(activity.due_at, format: :short) %></span>
+          </li>
+        <% end %>
+      </ul>
+    <% else %>
+      <p class="text-muted mb-0">Não há atividades com prazo futuro.</p>
+    <% end %>
+  </div>
+</div>
