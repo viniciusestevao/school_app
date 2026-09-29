@@ -10,16 +10,7 @@ class CourseNode < ApplicationRecord
   accepts_nested_attributes_for :activity, allow_destroy: true
 
   validates :title, presence: true
-  validate :parent_same_course
-
-  # Valida que activity existe quando kind == activity
-  # validate :activity_presence_for_activity_kind
-  #
-  # def activity_presence_for_activity_kind
-  #   if kind == "activity" && activity.blank?
-  #     errors.add(:base, "Atividade é obrigatória para nós do tipo Activity")
-  #   end
-  # end
+  validate :parent_same_course, :activity_matches_kind
 
   def leaf? = children.empty?
   def activity_leaf? = kind_activity? && leaf?
@@ -29,5 +20,13 @@ class CourseNode < ApplicationRecord
   def parent_same_course
     return if parent.nil?
     errors.add(:parent, "deve pertencer ao mesmo curso") if parent.course_id != course_id
+  end
+
+  def activity_matches_kind
+    if kind_activity? && (activity.nil? || activity.marked_for_destruction?)
+      errors.add(:activity, "é obrigatória para nós do tipo atividade")
+    elsif !kind_activity? && activity.present? && !activity.marked_for_destruction?
+      errors.add(:activity, "só pode existir em nós do tipo atividade")
+    end
   end
 end

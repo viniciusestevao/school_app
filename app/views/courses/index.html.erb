@@ -54,6 +54,8 @@
 <% else %>
   <div class="text-center p-5 border rounded-3 bg-light">
     <p class="mb-3">Nenhum curso cadastrado ainda.</p>
-    <%= link_to "Cadastrar primeiro curso", new_course_path, class: "btn btn-primary" %>
+    <% if current_user.admin? %>
+      <%= link_to "Cadastrar primeiro curso", new_course_path, class: "btn btn-primary" %>
+    <% end %>
   </div>
 <% end %>

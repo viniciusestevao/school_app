@@ -9,12 +9,15 @@ export default class extends Controller {
     const isActivity = this.kindSelectTarget.value === "activity"
     this.activityWrapTarget.classList.toggle("d-none", !isActivity)
 
-    if (this.hasDestroyFieldTarget) {
-      this.destroyFieldTarget.value = isActivity ? "0" : "1"
-    }
-
     this.activityWrapTarget
       .querySelectorAll("input,select,textarea")
-      .forEach(el => el.disabled = !isActivity)
+      .forEach(el => {
+        if (!this.hasDestroyFieldTarget || el !== this.destroyFieldTarget) el.disabled = !isActivity
+      })
+
+    if (this.hasDestroyFieldTarget) {
+      this.destroyFieldTarget.disabled = false
+      this.destroyFieldTarget.value = isActivity ? "0" : "1"
+    }
   }
 }

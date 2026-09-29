@@ -1,7 +1,10 @@
 require "test_helper"
 
 class ActivityTest < ActiveSupport::TestCase
-  # test "the truth" do
-  #   assert true
-  # end
+  test "does not accept negative points" do
+    activity = activities(:one)
+    activity.points = -1
+
+    assert_not activity.valid?
+  end
 end
